@@ -1,0 +1,521 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+:root {
+  --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: 'Space Grotesk', monospace;
+
+  /* Color Hunt Palette: https://colorhunt.co/palette/f5f5f576abae303841ff5722 */
+  --bg-dark: #f5f5f5;          /* Light gray background */
+  --bg-card: #ffffff;          /* Pure white card background */
+  --bg-card-hover: #fafafa;
+  --border-color: rgba(48, 56, 65, 0.12); /* Slate-based border */
+  
+  --text-primary: #303841;     /* Dark slate gray text */
+  --text-secondary: #5e6d7d;   /* Lighter slate for sub-items */
+  --text-muted: #76abae;       /* Soft teal for metadata labels */
+  
+  --accent-teal: #76abae;      /* Soft teal accent */
+  --accent-orange: #ff5722;    /* Vibrant orange-red accent */
+  
+  --gradient-primary: linear-gradient(135deg, #76abae 0%, #303841 100%);
+  
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 8px 24px -6px rgba(48, 56, 65, 0.08);
+  --shadow-glow-teal: 0 0 10px rgba(118, 171, 174, 0.55);
+  --shadow-glow-orange: 0 0 10px rgba(255, 87, 34, 0.55);
+  
+  --radius-sm: 6px;
+  --radius-md: 12px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-dark);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 1.25rem;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  flex-grow: 1;
+}
+
+/* Control Panel Card */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  transition: all 0.2s ease;
+}
+
+.card:hover {
+  border-color: rgba(48, 56, 65, 0.2);
+  background: var(--bg-card-hover);
+}
+
+.controls-section {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.selection-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  align-items: center;
+}
+
+.control-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.control-item label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+}
+
+select {
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-weight: 500;
+  cursor: pointer;
+  outline: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235e6d7d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.6rem center;
+  background-size: 0.85rem;
+  transition: all 0.15s ease;
+}
+
+select:focus {
+  border-color: var(--accent-teal);
+  box-shadow: 0 0 0 2px rgba(118, 171, 174, 0.15);
+}
+
+/* Premium Buttons */
+.btn {
+  background: var(--accent-orange);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-glow-orange);
+  filter: brightness(1.06);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+/* Toggle Switches */
+.toggles-group {
+  display: flex;
+  gap: 1.25rem;
+  align-items: center;
+}
+
+.toggle-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.toggle-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.toggle-switch {
+  position: relative;
+  background: rgba(48, 56, 65, 0.12);
+  border-radius: 999px;
+  transition: background 0.15s ease;
+}
+
+.toggle-switch::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: calc(1.35rem - 4px);
+  height: calc(1.35rem - 4px);
+  background: #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  transition: transform 0.15s ease;
+}
+
+.toggle-item input {
+  display: none;
+}
+
+.toggle-item input:checked + .toggle-switch {
+  background: var(--accent-teal);
+}
+
+.toggle-item input:checked + .toggle-switch::after {
+  transform: translateX(1.15rem);
+}
+
+/* Note Badges (ScaleDetails) */
+.notes-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.note-badge {
+  background: rgba(48, 56, 65, 0.03);
+  border: 1px solid var(--border-color);
+  text-align: center;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.note-badge::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 2px;
+  background: transparent;
+}
+
+.note-badge.is-root::before {
+  background: var(--accent-orange);
+}
+
+.note-badge.is-root {
+  border-color: rgba(255, 87, 34, 0.25);
+  background: rgba(255, 87, 34, 0.05);
+}
+
+.note-badge:not(.is-root).is-scale-note::before {
+  background: var(--accent-teal);
+}
+
+.note-badge:not(.is-root).is-scale-note {
+  border-color: rgba(118, 171, 174, 0.25);
+  background: rgba(118, 171, 174, 0.05);
+}
+
+.note-badge .note-name {
+  font-weight: 700;
+  color: var(--text-primary);
+  display: block;
+  line-height: 1.1;
+}
+
+.note-badge .note-interval {
+  font-family: var(--font-mono);
+  color: var(--text-secondary);
+  display: block;
+  line-height: 1;
+}
+
+/* Guitar Fretboard Styling */
+.fretboard-container {
+  overflow-x: auto;
+  padding: 0.5rem 0.25rem;
+  border-radius: var(--radius-md);
+  background: #303841; /* Dark slate gray fretboard neck */
+  border: 1px solid rgba(48, 56, 65, 0.2);
+  box-shadow: 0 4px 12px rgba(48, 56, 65, 0.15), inset 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.fretboard-container::-webkit-scrollbar {
+  height: 6px;
+}
+
+.fretboard-container::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 99px;
+}
+
+.fretboard-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 99px;
+}
+
+.fretboard-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.fretboard {
+  position: relative;
+  display: grid;
+  grid-template-rows: repeat(6, 2.4rem);
+  background: linear-gradient(90deg, #37404a 0%, #293038 100%);
+  border-radius: 4px;
+  min-width: 850px;
+  margin: 0 0.5rem;
+}
+
+/* Fret markers / dots */
+.fretboard-markers {
+  display: flex;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.fret-marker-dot {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: #505a66;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.fret-marker-dot-double-top {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: #505a66;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  top: 25%;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.fret-marker-dot-double-bottom {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: #505a66;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  top: 75%;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+/* Strings background rendering */
+.strings-bg {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  pointer-events: none;
+  z-index: 2;
+  padding: 1.2rem 0;
+}
+
+.string-wire {
+  height: var(--thickness);
+  background: linear-gradient(180deg, #e5e7eb 0%, #cbd5e1 50%, #6b7280 100%);
+  width: 100%;
+}
+
+/* Frets background lines */
+.frets-bg {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.fret-wire {
+  border-right: 2px solid #505a66;
+  border-left: 1px solid #1a1e24;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+}
+
+/* Column positions computed in CSS grid or inline percentages */
+.fret-number-row {
+  display: flex;
+  position: relative;
+  min-width: 850px;
+  height: 1.2rem;
+  margin: 0 0.5rem;
+  color: #94a3b8; /* Lighter color for fret numbers on dark container background */
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+.fret-number-cell {
+  position: absolute;
+  transform: translateX(-50%);
+  text-align: center;
+  font-weight: 600;
+}
+
+/* Actual interactive note notes wrapper */
+.string-row {
+  display: flex;
+  position: relative;
+  width: 100%;
+  height: 2.4rem;
+  align-items: center;
+  z-index: 3;
+}
+
+.fret-cell {
+  position: absolute;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* Fretboard Nut (Fret 0 divider) */
+.nut {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+  background: linear-gradient(90deg, #f3f4f6 0%, #d1d5db 100%);
+  border-radius: 1px;
+  z-index: 4;
+}
+
+/* Note Display Bubble */
+.note-bubble {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  transition: all 0.15s ease;
+  color: transparent;
+  background: transparent;
+  border: 1px solid transparent;
+  user-select: none;
+}
+
+/* Hovering over note cells reveals note in white text on dark fretboard background */
+.fret-cell:hover .note-bubble {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.35);
+  transform: scale(1.08);
+}
+
+.note-bubble.is-active {
+  color: #ffffff;
+  background: var(--accent-teal);
+  border-color: var(--accent-teal);
+  box-shadow: var(--shadow-glow-teal);
+}
+
+.note-bubble.is-active.is-root-note {
+  color: #ffffff;
+  background: var(--accent-orange);
+  border-color: var(--accent-orange);
+  box-shadow: var(--shadow-glow-orange);
+}
+
+/* Dim non-scale active notes if hidden */
+.note-bubble.is-hidden {
+  opacity: 0.15;
+  pointer-events: none;
+}
+
+.note-bubble.is-active.is-hidden {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Visual cues for open strings notes column (Fret 0) */
+.fret-cell-0 {
+  background: rgba(0, 0, 0, 0.22);
+  border-right: 3px solid var(--accent-teal); /* Teal divider marker at nut */
+}
+
+.fret-cell-0 .note-bubble {
+  width: 19px;
+  height: 19px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .controls-section {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0.75rem !important;
+  }
+  
+  .selection-group {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .toggles-group {
+    justify-content: space-between;
+  }
+  
+  .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
