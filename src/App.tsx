@@ -22,9 +22,44 @@ const SCALE_TYPES = [
   { name: 'Half-Whole Diminished', value: 'half-whole diminished' },
 ];
 
+// Scale of the Day Helpers
+const getESTDateString = () => {
+  try {
+    return new Date().toLocaleDateString('en-US', { timeZone: 'America/New_York' });
+  } catch (e) {
+    const d = new Date();
+    // Fallback timezone offset shift to EST (approx UTC-5)
+    const est = new Date(d.getTime() + (d.getTimezoneOffset() - 300) * 60000);
+    return `${est.getMonth() + 1}/${est.getDate()}/${est.getFullYear()}`;
+  }
+};
+
+const getStringHash = (str: string) => {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i);
+    hash = (hash << 5) - hash + char;
+    hash |= 0;
+  }
+  return Math.abs(hash);
+};
+
+// Exclude minor pentatonic scale for the daily challenge
+const SCALE_TYPES_FOR_DAY = SCALE_TYPES.filter(st => (st.value !== 'minor pentatonic') && (st.value !== 'major pentatonic'));
+
+const getScaleOfTheDay = () => {
+  const dateStr = getESTDateString();
+  const seed = getStringHash(dateStr);
+  const rootVal = ROOTS[seed % ROOTS.length];
+  const typeVal = SCALE_TYPES_FOR_DAY[(seed >> 4) % SCALE_TYPES_FOR_DAY.length].value;
+  return { root: rootVal, type: typeVal };
+};
+
 function App() {
-  const [root, setRoot] = useState('E');
-  const [scaleType, setScaleType] = useState('minor pentatonic');
+  // Default on first launch to Scale of the Day
+  const initialSotd = getScaleOfTheDay();
+  const [root, setRoot] = useState(initialSotd.root);
+  const [scaleType, setScaleType] = useState(initialSotd.type);
 
   // Tonal.js Scale object state
   const [currentScale, setCurrentScale] = useState<any>(null);
@@ -38,8 +73,11 @@ function App() {
     const scaleName = `${root} ${scaleType}`;
     const calculatedScale = Scale.get(scaleName);
     setCurrentScale(calculatedScale);
-    console.log(Scale.get(scaleName).notes);
   }, [root, scaleType]);
+
+  // Determine if the current scale matches the Scale of the Day
+  const sotdToday = getScaleOfTheDay();
+  const isSotd = root === sotdToday.root && scaleType === sotdToday.type;
 
   // Generate a random scale (Root + Type)
   const handleRandomScale = () => {
@@ -47,6 +85,13 @@ function App() {
     const randomType = SCALE_TYPES[Math.floor(Math.random() * SCALE_TYPES.length)].value;
     setRoot(randomRoot);
     setScaleType(randomType);
+  };
+
+  // Set selected scale to Scale of the Day
+  const handleLoadScaleOfTheDay = () => {
+    const today = getScaleOfTheDay();
+    setRoot(today.root);
+    setScaleType(today.type);
   };
 
   // Play audio tone on fret note click
@@ -88,13 +133,13 @@ function App() {
   return (
     <>
       <header style={{ marginBottom: '0.75rem', textAlign: 'left', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h1 style={{ fontSize: '1.6rem', margin: 0, fontWeight: 700 }}>Scale Practice Tool</h1>
+        <h1 style={{ fontSize: '1.6rem', margin: 0, fontWeight: 700 }}>Scale Practice</h1>
         <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>💡 Click notes to play audio tone</span>
       </header>
 
       <main style={{ gap: '1rem' }}>
         {/* 1. Scale Information at the Top */}
-        {currentScale && <ScaleDetails scale={currentScale} />}
+        {currentScale && <ScaleDetails scale={currentScale} isScaleOfTheDay={isSotd} />}
 
         {/* 2. Guitar Fretboard in the Middle */}
         {currentScale && (
@@ -142,28 +187,55 @@ function App() {
             </div>
 
             <div className="control-item" style={{ justifyContent: 'flex-end', height: '100%', paddingTop: '1.1rem' }}>
-              <button
-                type="button"
-                className="btn"
-                onClick={handleRandomScale}
-                id="btn-random-scale"
-                style={{ padding: '0.5rem 1.25rem', fontSize: '0.9rem' }}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+              <div style={{ display: 'flex', gap: '0.5rem' }}>
+                <button
+                  type="button"
+                  className="btn"
+                  onClick={handleRandomScale}
+                  id="btn-random-scale"
+                  style={{ padding: '0.5rem 1.25rem', fontSize: '0.9rem' }}
                 >
-                  <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67" />
-                </svg>
-                Random Scale
-              </button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67" />
+                  </svg>
+                  Random Scale
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={handleLoadScaleOfTheDay}
+                  id="btn-scale-of-the-day"
+                  style={{ padding: '0.5rem 1.25rem', fontSize: '0.9rem' }}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                    <line x1="16" y1="2" x2="16" y2="6" />
+                    <line x1="8" y1="2" x2="8" y2="6" />
+                    <line x1="3" y1="10" x2="21" y2="10" />
+                  </svg>
+                  Scale of the Day
+                </button>
+              </div>
             </div>
           </div>
 

@@ -3,9 +3,10 @@ import { Note, Chord } from '@tonaljs/tonal';
 
 interface ScaleDetailsProps {
   scale: any; // Tonal.js Scale object
+  isScaleOfTheDay?: boolean;
 }
 
-export const ScaleDetails: React.FC<ScaleDetailsProps> = ({ scale }) => {
+export const ScaleDetails: React.FC<ScaleDetailsProps> = ({ scale, isScaleOfTheDay }) => {
   if (!scale || scale.empty) {
     return (
       <div className="card" style={{ padding: '0.75rem' }}>
@@ -74,8 +75,8 @@ export const ScaleDetails: React.FC<ScaleDetailsProps> = ({ scale }) => {
     <div className="card" style={{ padding: '0.85rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
       <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.1rem' }}>
-          <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)', fontWeight: 600 }}>
-            Active Scale
+          <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: isScaleOfTheDay ? 'var(--accent-orange)' : 'var(--text-muted)', fontWeight: 700 }}>
+            {isScaleOfTheDay ? 'Scale of the Day 🌟' : 'Active Scale'}
           </span>
           <h2 style={{ fontSize: '1.5rem', fontWeight: 700, margin: 0, lineHeight: 1.1 }}>{scale.name}</h2>
         </div>

@@ -151,6 +151,24 @@ select:focus {
   transform: translateY(0);
 }
 
+.btn-secondary {
+  background: #ffffff;
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-secondary:hover {
+  background: var(--bg-card-hover);
+  border-color: rgba(48, 56, 65, 0.25);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.04);
+  transform: translateY(-1px);
+}
+
+.btn-secondary:active {
+  transform: translateY(0);
+}
+
 /* Toggle Switches */
 .toggles-group {
   display: flex;
