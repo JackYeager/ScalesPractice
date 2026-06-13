@@ -493,7 +493,14 @@ select:focus {
   box-shadow: var(--shadow-glow-orange);
 }
 
-/* Dim non-scale active notes if hidden */
+/* Show non-scale notes when showAllNotes is enabled (bubble has no is-hidden class) */
+.note-bubble:not(.is-active):not(.is-hidden) {
+  color: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* Dim non-scale notes if hidden */
 .note-bubble.is-hidden {
   opacity: 0.15;
   pointer-events: none;
