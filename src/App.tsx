@@ -94,47 +94,11 @@ function App() {
     setScaleType(today.type);
   };
 
-  // Play audio tone on fret note click
-  const handleNoteClick = (noteName: string) => {
-    try {
-      let noteWithOctave = noteName;
-      if (!/[0-9]/.test(noteName)) {
-        noteWithOctave = `${noteName}3`;
-      }
-
-      const midi = Note.midi(noteWithOctave);
-      if (!midi) return;
-
-      const frequency = Math.pow(2, (midi - 69) / 12) * 440;
-
-      const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
-      if (!AudioContextClass) return;
-
-      const audioCtx = new AudioContextClass();
-      const osc = audioCtx.createOscillator();
-      const gainNode = audioCtx.createGain();
-
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(frequency, audioCtx.currentTime);
-
-      gainNode.gain.setValueAtTime(0.15, audioCtx.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.6);
-
-      osc.connect(gainNode);
-      gainNode.connect(audioCtx.destination);
-
-      osc.start();
-      osc.stop(audioCtx.currentTime + 0.6);
-    } catch (e) {
-      console.warn('AudioContext blocked:', e);
-    }
-  };
 
   return (
     <>
       <header style={{ marginBottom: '0.75rem', textAlign: 'left', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <h1 style={{ fontSize: '1.6rem', margin: 0, fontWeight: 700 }}>Scale Practice</h1>
-        <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>💡 Click notes to play audio tone</span>
       </header>
 
       <main style={{ gap: '1rem' }}>
@@ -147,7 +111,7 @@ function App() {
             scale={currentScale}
             showIntervals={showIntervals}
             showAllNotes={showAllNotes}
-            onNoteClick={handleNoteClick}
+          //onNoteClick={handleNoteClick}
           />
         )}
 

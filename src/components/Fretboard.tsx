@@ -49,14 +49,12 @@ interface FretboardProps {
   scale: any; // Tonal.js Scale object
   showIntervals: boolean;
   showAllNotes: boolean;
-  onNoteClick?: (noteName: string) => void;
 }
 
 export const Fretboard: React.FC<FretboardProps> = ({
   scale,
   showIntervals,
   showAllNotes,
-  onNoteClick,
 }) => {
   // Build maps for quick note lookup inside the current scale
   const scaleChromas = new Map<number, { note: string; interval: string }>();
@@ -138,7 +136,6 @@ export const Fretboard: React.FC<FretboardProps> = ({
           left: `${leftPos}%`,
           width: `${widthPos}%`,
         }}
-        onClick={() => onNoteClick && onNoteClick(noteName)}
         title={`${noteName}${isActive ? ` (${scaleMatch!.interval})` : ''}`}
       >
         <div
