@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Scale, Note } from '@tonaljs/tonal';
+import { Scale } from '@tonaljs/tonal';
 import { Fretboard } from './components/Fretboard';
 import { ScaleDetails } from './components/ScaleDetails';
 
@@ -67,6 +67,7 @@ function App() {
   // User preferences states
   const [showIntervals, setShowIntervals] = useState(false);
   const [showAllNotes, setShowAllNotes] = useState(false);
+  const [isLefty, setIsLefty] = useState(false);
 
   // Trigger scale calculation whenever root or scaleType changes
   useEffect(() => {
@@ -111,6 +112,7 @@ function App() {
             scale={currentScale}
             showIntervals={showIntervals}
             showAllNotes={showAllNotes}
+            isLefty={isLefty}
           //onNoteClick={handleNoteClick}
           />
         )}
@@ -224,6 +226,17 @@ function App() {
               />
               <div className="toggle-switch" style={{ width: '2.5rem', height: '1.35rem' }}></div>
               <span className="toggle-label" style={{ fontSize: '0.85rem' }}>Show All Notes</span>
+            </label>
+
+            <label className="toggle-item" htmlFor="toggle-lefty">
+              <input
+                type="checkbox"
+                id="toggle-lefty"
+                checked={isLefty}
+                onChange={(e) => setIsLefty(e.target.checked)}
+              />
+              <div className="toggle-switch" style={{ width: '2.5rem', height: '1.35rem' }}></div>
+              <span className="toggle-label" style={{ fontSize: '0.85rem' }}>Lefty View</span>
             </label>
           </div>
         </section>

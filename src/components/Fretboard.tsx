@@ -49,13 +49,17 @@ interface FretboardProps {
   scale: any; // Tonal.js Scale object
   showIntervals: boolean;
   showAllNotes: boolean;
+  isLefty?: boolean;
 }
 
 export const Fretboard: React.FC<FretboardProps> = ({
   scale,
   showIntervals,
   showAllNotes,
+  isLefty = false,
 }) => {
+  const getPos = (pos: number) => (isLefty ? 100 - pos : pos);
+
   // Build maps for quick note lookup inside the current scale
   const scaleChromas = new Map<number, { note: string; interval: string }>();
 
@@ -127,13 +131,14 @@ export const Fretboard: React.FC<FretboardProps> = ({
 
     const leftPos = fret === 0 ? 0 : FRET_POSITIONS[fret - 1];
     const widthPos = fret === 0 ? 5 : FRET_POSITIONS[fret] - FRET_POSITIONS[fret - 1];
+    const computedLeft = isLefty ? 100 - leftPos - widthPos : leftPos;
 
     return (
       <div
         key={`fret-${stringIdx}-${fret}`}
         className={`fret-cell fret-cell-${fret}`}
         style={{
-          left: `${leftPos}%`,
+          left: `${computedLeft}%`,
           width: `${widthPos}%`,
         }}
         title={`${noteName}${isActive ? ` (${scaleMatch!.interval})` : ''}`}
@@ -153,14 +158,14 @@ export const Fretboard: React.FC<FretboardProps> = ({
     <div className="card" style={{ padding: '1.25rem' }}>
       <h3 style={{ fontSize: '1.25rem', marginBottom: '1.5rem', fontWeight: 600 }}>Interactive Fretboard</h3>
 
-      <div className="fretboard-container">
+      <div className={`fretboard-container ${isLefty ? 'is-lefty' : ''}`}>
         {/* Fretboard Labels Row (top of fretboard) */}
         <div className="fret-number-row" style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '0.25rem', marginBottom: '0.25rem' }}>
           {FRET_CENTERS.map((pos, idx) => (
             <div
               key={`label-top-${idx}`}
               className="fret-number-cell"
-              style={{ left: `${pos}%` }}
+              style={{ left: `${getPos(pos)}%` }}
             >
               {idx === 0 ? 'Open' : idx}
             </div>
@@ -170,7 +175,7 @@ export const Fretboard: React.FC<FretboardProps> = ({
         {/* Fretboard Graphic Wrapper */}
         <div className="fretboard">
           {/* Fretboard Nut */}
-          <div className="nut" style={{ left: `${FRET_POSITIONS[0]}%` }}></div>
+          <div className="nut" style={{ left: `${getPos(FRET_POSITIONS[0])}%`, transform: 'translateX(-50%)' }}></div>
 
           {/* Fret Wires */}
           <div className="frets-bg">
@@ -178,7 +183,7 @@ export const Fretboard: React.FC<FretboardProps> = ({
               <div
                 key={`fretwire-${idx}`}
                 className="fret-wire"
-                style={{ left: `${pos}%` }}
+                style={{ left: `${getPos(pos)}%` }}
               ></div>
             ))}
           </div>
@@ -191,7 +196,7 @@ export const Fretboard: React.FC<FretboardProps> = ({
                   <div
                     key={`marker-${idx}`}
                     className="fret-marker-dot"
-                    style={{ left: `${pos}%` }}
+                    style={{ left: `${getPos(pos)}%` }}
                   ></div>
                 );
               }
@@ -200,11 +205,11 @@ export const Fretboard: React.FC<FretboardProps> = ({
                   <React.Fragment key={`marker-${idx}`}>
                     <div
                       className="fret-marker-dot-double-top"
-                      style={{ left: `${pos}%` }}
+                      style={{ left: `${getPos(pos)}%` }}
                     ></div>
                     <div
                       className="fret-marker-dot-double-bottom"
-                      style={{ left: `${pos}%` }}
+                      style={{ left: `${getPos(pos)}%` }}
                     ></div>
                   </React.Fragment>
                 );
@@ -245,7 +250,7 @@ export const Fretboard: React.FC<FretboardProps> = ({
             <div
               key={`label-bottom-${idx}`}
               className="fret-number-cell"
-              style={{ left: `${pos}%` }}
+              style={{ left: `${getPos(pos)}%` }}
             >
               {idx === 0 ? 'Nut' : idx}
             </div>

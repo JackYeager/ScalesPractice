@@ -517,6 +517,17 @@ select:focus {
   border-right: 3px solid var(--accent-teal); /* Teal divider marker at nut */
 }
 
+/* Lefty view adjustments */
+.is-lefty .fret-cell-0 {
+  border-right: none;
+  border-left: 3px solid var(--accent-teal);
+}
+
+.is-lefty .fret-wire {
+  border-right: 1px solid #1a1e24;
+  border-left: 2px solid #505a66;
+}
+
 .fret-cell-0 .note-bubble {
   width: 19px;
   height: 19px;
