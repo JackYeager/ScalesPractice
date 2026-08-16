@@ -20,6 +20,15 @@ const SCALE_TYPES = [
   { name: 'Blues Scale', value: 'blues' },
   { name: 'Whole Tone', value: 'whole tone' },
   { name: 'Half-Whole Diminished', value: 'half-whole diminished' },
+  { name: 'Gypsy (Double Harmonic Major)', value: 'double harmonic major' },
+  { name: 'Gypsy Minor (Hungarian Minor)', value: 'hungarian minor' },
+  { name: 'Arabian (Locrian Major)', value: 'arabian' },
+  { name: 'Persian', value: 'persian' },
+  { name: 'Phrygian Dominant', value: 'phrygian dominant' },
+  { name: 'Spanish Heptatonic', value: 'spanish heptatonic' },
+  { name: 'Flamenco', value: 'flamenco' },
+  { name: 'Japanese (Hirajoshi)', value: 'hirajoshi' },
+  { name: 'Japanese (Iwato)', value: 'iwato' },
 ];
 
 // Scale of the Day Helpers
