@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Scale } from '@tonaljs/tonal';
 import { Fretboard } from './components/Fretboard';
 import { ScaleDetails } from './components/ScaleDetails';
+import { Metronome } from './components/Metronome';
 
 const ROOTS = ['C', 'C#', 'Db', 'D', 'Eb', 'E', 'F', 'F#', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B'];
 
@@ -35,7 +36,7 @@ const SCALE_TYPES = [
 const getESTDateString = () => {
   try {
     return new Date().toLocaleDateString('en-US', { timeZone: 'America/New_York' });
-  } catch (e) {
+  } catch {
     const d = new Date();
     // Fallback timezone offset shift to EST (approx UTC-5)
     const est = new Date(d.getTime() + (d.getTimezoneOffset() - 300) * 60000);
@@ -70,20 +71,13 @@ function App() {
   const [root, setRoot] = useState(initialSotd.root);
   const [scaleType, setScaleType] = useState(initialSotd.type);
 
-  // Tonal.js Scale object state
-  const [currentScale, setCurrentScale] = useState<any>(null);
-
   // User preferences states
   const [showIntervals, setShowIntervals] = useState(false);
   const [showAllNotes, setShowAllNotes] = useState(false);
   const [isLefty, setIsLefty] = useState(false);
 
-  // Trigger scale calculation whenever root or scaleType changes
-  useEffect(() => {
-    const scaleName = `${root} ${scaleType}`;
-    const calculatedScale = Scale.get(scaleName);
-    setCurrentScale(calculatedScale);
-  }, [root, scaleType]);
+  // Derive Tonal.js Scale object directly during render
+  const currentScale = Scale.get(`${root} ${scaleType}`);
 
   // Determine if the current scale matches the Scale of the Day
   const sotdToday = getScaleOfTheDay();
@@ -249,6 +243,9 @@ function App() {
             </label>
           </div>
         </section>
+
+        {/* 4. Metronome Card under Scale Selection */}
+        <Metronome />
       </main>
     </>
   );

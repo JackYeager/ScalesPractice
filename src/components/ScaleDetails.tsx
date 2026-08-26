@@ -1,8 +1,16 @@
 import React from 'react';
-import { Note, Chord } from '@tonaljs/tonal';
+import { Note, Chord, Scale } from '@tonaljs/tonal';
+
+type ScaleData = ReturnType<typeof Scale.get>;
+
+interface DiatonicChord {
+  root: string;
+  triad: string;
+  seventh: string;
+}
 
 interface ScaleDetailsProps {
-  scale: any; // Tonal.js Scale object
+  scale: ScaleData;
   isScaleOfTheDay?: boolean;
 }
 
@@ -33,7 +41,7 @@ export const ScaleDetails: React.FC<ScaleDetailsProps> = ({ scale, isScaleOfTheD
   };
 
   // Generate diatonic chords for each note of the scale
-  const getDiatonicChords = () => {
+  const getDiatonicChords = (): DiatonicChord[] => {
     if (!scale || !scale.notes || scale.notes.length === 0) return [];
     
     const notes = scale.notes;
@@ -82,7 +90,7 @@ export const ScaleDetails: React.FC<ScaleDetailsProps> = ({ scale, isScaleOfTheD
         </div>
         <div className="notes-container" style={{ marginTop: 0, gap: '0.5rem' }}>
           {scale.notes.map((note: string, idx: number) => {
-            const isRoot = Note.chroma(note) === Note.chroma(scale.tonic);
+            const isRoot = Note.chroma(note) === Note.chroma(scale.tonic || '');
             const interval = scale.intervals[idx] || '';
             
             return (
@@ -107,7 +115,7 @@ export const ScaleDetails: React.FC<ScaleDetailsProps> = ({ scale, isScaleOfTheD
             Accompanying Diatonic Chords
           </span>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-            {chords.map((chord: any, idx: number) => (
+            {chords.map((chord: DiatonicChord, idx: number) => (
               <div 
                 key={`chord-${idx}`} 
                 style={{ 

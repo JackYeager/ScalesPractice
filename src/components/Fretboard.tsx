@@ -1,5 +1,5 @@
 import React from 'react';
-import { Note } from '@tonaljs/tonal';
+import { Note, Scale } from '@tonaljs/tonal';
 
 // Define the guitar strings (standard tuning: E4, B3, G3, D3, A2, E2)
 // High E string is at index 0 (top of the fretboard visually)
@@ -45,8 +45,10 @@ const FRET_CENTERS = getFretCenters();
 // Standard chromatic scale spelling (sharps by default for non-scale notes)
 const CHROMATIC_SHARPS = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 
+type ScaleData = ReturnType<typeof Scale.get>;
+
 interface FretboardProps {
-  scale: any; // Tonal.js Scale object
+  scale: ScaleData;
   showIntervals: boolean;
   showAllNotes: boolean;
   isLefty?: boolean;
@@ -117,7 +119,7 @@ export const Fretboard: React.FC<FretboardProps> = ({
     const noteName = isActive ? scaleMatch!.note : CHROMATIC_SHARPS[noteChroma];
 
     // Determine root note
-    const isRoot = isActive && Note.chroma(scale.tonic) === noteChroma;
+    const isRoot = isActive && scale.tonic !== null && Note.chroma(scale.tonic) === noteChroma;
 
     // Determine interval display name
     const intervalDisplay = isActive ? formatIntervalDisplay(scaleMatch!.interval) : '';
