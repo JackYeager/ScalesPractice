@@ -715,12 +715,13 @@ select:focus {
 }
 
 .metronome-slider-ticks {
-  display: flex;
-  justify-content: space-between;
+  position: relative;
+  height: 14px;
   font-family: var(--font-mono);
   font-size: 0.65rem;
   color: var(--text-secondary);
-  padding: 0 2px;
+  /* Account for 18px slider thumb radius (9px on each end) */
+  margin: 0 9px;
 }
 
 .metronome-action-group {

@@ -199,12 +199,21 @@ export const Metronome: React.FC<MetronomeProps> = ({ initialBpm = 100 }) => {
                 aria-label="BPM slider"
               />
               <div className="metronome-slider-ticks">
-                <span>30</span>
-                <span>60</span>
-                <span>100</span>
-                <span>140</span>
-                <span>180</span>
-                <span>250</span>
+                {[30, 60, 100, 140, 180, 220, 250].map((tick) => {
+                  const percent = ((tick - 30) / (250 - 30)) * 100;
+                  return (
+                    <span
+                      key={tick}
+                      style={{
+                        position: 'absolute',
+                        left: `${percent}%`,
+                        transform: 'translateX(-50%)',
+                      }}
+                    >
+                      {tick}
+                    </span>
+                  );
+                })}
               </div>
             </div>
 
